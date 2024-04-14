@@ -1,0 +1,151 @@
+<?php
+header("Access-Control-Allow-Origin: *");
+
+function connexionBDD() {
+    // Informations de connexion à la base de données
+    $servername = "localhost";
+    $username = "xAdmin";
+    $password = '5j~4&I2`5UM.@;#$e1';
+    $dbname = "x";
+
+    // Connexion à la base de données MySQL
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    // Vérification de la connexion
+    if ($conn->connect_error) {
+        die("Erreur de connexion à la base de données : " . $conn->connect_error);
+    }
+
+    // Retourner l'objet de connexion
+    return $conn;
+}
+
+// Endpoint pour récupérer des données depuis la base de données
+function getDataFromDatabase() {    
+    // Établir la connexion à la base de données
+    $conn = connexionBDD();
+
+    // Vérifier la méthode de la requête HTTP
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $url = $_SERVER['REQUEST_URI'];
+        
+        // Retirer le chemin de base, y compris 'API.php'
+        $url = str_replace('/projet%20v2/projet-x/src/API/API.php/', '', $url);
+
+        // Extraire les segments d'URL
+        $urlSegments = explode('/', $url);
+        $action = $urlSegments[0];
+
+        switch ($action) {
+            case 'data':
+                $sql = "SELECT * FROM composant";
+                // Exécuter la requête SQL
+                $result = $conn->query($sql);
+                // Vérifier s'il y a des résultats
+                if ($result->num_rows > 0) {
+                    // Créer un tableau pour stocker les données
+                    $data = array();
+                    // Parcourir les résultats et les stocker dans le tableau
+                    while ($row = $result->fetch_assoc()) {
+                        $data[] = $row;
+                    }
+                    // Convertir les données en format JSON et les retourner
+                    return json_encode($data);
+                } else {
+                    // Aucune donnée trouvée
+                    return "Aucune donnée trouvée";
+                }
+            case 'qrcode':
+                // Récupérer la valeur après "qrcode/"
+                $qrCodeValue = $urlSegments[1];
+                // Utiliser cette valeur pour la requête SQL
+                $sql = "SELECT * FROM composant WHERE qrCode = '$qrCodeValue'";
+                // Exécuter la requête SQL
+                $result = $conn->query($sql);
+                // Vérifier s'il y a des résultats
+                if ($result->num_rows > 0) {
+                    // Créer un tableau pour stocker les données
+                    $data = array();
+                    // Parcourir les résultats et les stocker dans le tableau
+                    while ($row = $result->fetch_assoc()) {
+                        $data[] = $row;
+                    }
+                    // Convertir les données en format JSON et les retourner
+                    return json_encode($data);
+                } else {
+                    // Aucune donnée trouvée
+                    return "Aucune donnée trouvée pour '$qrCodeValue'";
+                }
+            case 'stock':
+                // Récupérer la valeur après "stock/"
+                $qrCodeValue = $urlSegments[1];
+                // Utiliser cette valeur pour la requête SQL
+                $sql = "SELECT * FROM x.stock stock 
+                    left join x.composant composant on composant.idComposant = stock.idComposant
+                WHERE qrCode = '$qrCodeValue'";
+                // Exécuter la requête SQL
+                $result = $conn->query($sql);
+                // Vérifier s'il y a des résultats
+                if ($result->num_rows > 0) {
+                    // Créer un tableau pour stocker les données
+                    $data = array();
+                    // Parcourir les résultats et les stocker dans le tableau
+                    while ($row = $result->fetch_assoc()) {
+                        $data[] = $row;
+                    }
+                    // Convertir les données en format JSON et les retourner
+                    return json_encode($data);
+                } else {
+                    // Aucune donnée trouvée
+                    return "Aucune stock trouvée pour '$qrCodeValue'";
+                }
+            case 'stocks':
+                // Utiliser cette valeur pour la requête SQL
+                $sql = "SELECT type, qrCode, qteReel, qteMin FROM x.stock stock
+                join x.composant composant on composant.idComposant = stock.idComposant";
+                // Exécuter la requête SQL
+                $result = $conn->query($sql);
+                // Vérifier s'il y a des résultats
+                if ($result->num_rows > 0) {
+                    // Créer un tableau pour stocker les données
+                    $data = array();
+                    // Parcourir les résultats et les stocker dans le tableau
+                    while ($row = $result->fetch_assoc()) {
+                        $data[] = $row;
+                    }
+                    // Convertir les données en format JSON et les retourner
+                    return json_encode($data);
+                } else {
+                    // Aucune donnée trouvée
+                    return "Aucune donnée trouvée dans la table stocks";
+                }
+            case 'commande':
+                // Récupérer la valeur après "stock/"
+                $qrCodeValue = $urlSegments[1];
+                // Utiliser cette valeur pour la requête SQL
+                $sql = "SELECT *, services.libelle AS 'libelleService' FROM x.detailscommande dtscmd
+                LEFT join x.services services on services.idServices = dtscmd.idServices
+                LEFT join x.composant composant on composant.idComposant = dtscmd.idComposant
+                WHERE dtscmd.idCommande = '$qrCodeValue'";
+                // Exécuter la requête SQL
+                $result = $conn->query($sql);
+                // Vérifier s'il y a des résultats
+                if ($result->num_rows > 0) {
+                    // Créer un tableau pour stocker les données
+                    $data = array();
+                    // Parcourir les résultats et les stocker dans le tableau
+                    while ($row = $result->fetch_assoc()) {
+                        $data[] = $row;
+                    }
+                    // Convertir les données en format JSON et les retourner
+                    return json_encode($data);
+                } else {
+                    // Aucune donnée trouvée
+                    return "Aucune stock trouvée pour '$qrCodeValue'";
+                }
+        }
+    }
+}
+
+
+echo getDataFromDatabase();
