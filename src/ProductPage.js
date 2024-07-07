@@ -1,6 +1,9 @@
 // ProductPage.js
 import React, { useState, useEffect } from 'react';
 import './CSS/ProductPage.css';
+import getUrl from '../UrlApi.js';
+
+const url = getUrl();
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
@@ -8,7 +11,7 @@ const ProductPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://192.168.75.14/projet%20v2/projet-x/src/API/API.php/data');
+        const response = await fetch(`${url}/src/API/API.php/data`);
         const data = await response.json();
         setProducts(data);
       } catch (error) {
@@ -24,7 +27,7 @@ const ProductPage = () => {
       <h1>Product Page</h1>
       {products.map(product => (
         <div key={product.idComposant} className="product-details">
-          <img src={`http://192.168.75.14/projet%20v2/projet-x/src/ImageComposant/${product.type}/${product.qrCode}.jpg`} alt={product.libelle} />
+          <img src={`${url}/src/ImageComposant/${product.type}/${product.qrCode}.jpg`} alt={product.libelle} />
           <div className="product-info">
             <h2>{product.libelle}</h2>
             <p>Type: {product.type}</p>

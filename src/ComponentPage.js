@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './CSS/ComponentPage.css';
+import getUrl from './UrlApi.js';
 
+const url = getUrl();
 
   // Assume that getDataFromDatabase function is defined globally
   const getDataFromDatabase = async () => {
     try {
-      const response = await fetch('http://192.168.75.14:80/projet%20v2/projet-x/src/API/API.php/data');
+      const response = await fetch(`${url}/src/API/API.php/data`);
       const data = await response.json();
       return data;
     } catch (error) {

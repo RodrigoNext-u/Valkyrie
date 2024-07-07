@@ -1,17 +1,12 @@
 // App.js
 import React from 'react';
-import ComponentPage from './ComponentPage';
 import './CSS/App.css';
-import Header from './composant/Header';
-import ProductPage from './ProductPage';
-import ComposantForm from './composant/ComposantForm'
+import App2 from './composant/page';
 
 function App() {
   return (
     <div className="App">
-      <Header />
-      <ProductPage />
-      <ComposantForm/>
+      <App2 />
     </div>
   );
 }

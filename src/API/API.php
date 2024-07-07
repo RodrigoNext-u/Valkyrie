@@ -4,7 +4,7 @@ header("Access-Control-Allow-Origin: *");
 function connexionBDD() {
     // Informations de connexion à la base de données
     $servername = "localhost";
-    $username = "xAdmin";
+    $username = "Valkyrie_Admin";
     $password = '5j~4&I2`5UM.@;#$e1';
     $dbname = "x";
 
@@ -20,6 +20,20 @@ function connexionBDD() {
     return $conn;
 }
 
+function checkSqlInjection($input) {
+    // Liste de mots clés et caractères couramment utilisés dans les injections SQL
+    $patterns = [
+        '/select\s/i', '/insert\s/i', '/update\s/i', '/delete\s/i', '/drop\s/i', '/union\s/i',
+        '/--/', '/#/', '/;/', '/\s+/', '/\s*or\s+/i', '/\s*and\s+/i'
+    ];
+    foreach ($patterns as $pattern) {
+        if (preg_match($pattern, $input)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // Endpoint pour récupérer des données depuis la base de données
 function getDataFromDatabase() {    
     // Établir la connexion à la base de données
@@ -30,11 +44,12 @@ function getDataFromDatabase() {
         $url = $_SERVER['REQUEST_URI'];
         
         // Retirer le chemin de base, y compris 'API.php'
-        $url = str_replace('/projet%20v2/projet-x/src/API/API.php/', '', $url);
+        $url = str_replace('/Valkyrie/src/API/API.php/', '', $url);
 
         // Extraire les segments d'URL
         $urlSegments = explode('/', $url);
         $action = $urlSegments[0];
+
 
         switch ($action) {
             case 'data':
@@ -58,6 +73,9 @@ function getDataFromDatabase() {
             case 'qrcode':
                 // Récupérer la valeur après "qrcode/"
                 $qrCodeValue = $urlSegments[1];
+                // Check de la valeur afin d'éviter les injections SQL
+                if (checkSqlInjection($urlSegments[1]))
+                return;
                 // Utiliser cette valeur pour la requête SQL
                 $sql = "SELECT * FROM composant WHERE qrCode = '$qrCodeValue'";
                 // Exécuter la requête SQL
@@ -79,6 +97,9 @@ function getDataFromDatabase() {
             case 'stock':
                 // Récupérer la valeur après "stock/"
                 $qrCodeValue = $urlSegments[1];
+                // Check de la valeur afin d'éviter les injections SQL
+                if (checkSqlInjection($urlSegments[1]))
+                return;
                 // Utiliser cette valeur pour la requête SQL
                 $sql = "SELECT * FROM x.stock stock 
                     left join x.composant composant on composant.idComposant = stock.idComposant
@@ -120,8 +141,11 @@ function getDataFromDatabase() {
                     return "Aucune donnée trouvée dans la table stocks";
                 }
             case 'commande':
-                // Récupérer la valeur après "stock/"
+                // Récupérer la valeur après "commande/"
                 $qrCodeValue = $urlSegments[1];
+                // Check de la valeur afin d'éviter les injections SQL
+                if (checkSqlInjection($urlSegments[1]))
+                return;
                 // Utiliser cette valeur pour la requête SQL
                 $sql = "SELECT *, services.libelle AS 'libelleService' FROM x.detailscommande dtscmd
                 LEFT join x.services services on services.idServices = dtscmd.idServices
