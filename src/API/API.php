@@ -140,6 +140,31 @@ function getDataFromDatabase() {
                     // Aucune donnée trouvée
                     return "Aucune donnée trouvée dans la table stocks";
                 }
+            case 'compat':
+                $ComposantSegments = explode(',', $urlSegments[1]);
+                $nmbrComposant = count($ComposantSegments);
+                $sql = "SELECT c.* FROM x.composant c
+                        JOIN x.proprietes p ON c.idComposant = p.idComposant
+                        JOIN x.compatibilites co ON co.idComposant1 = p.idComposant
+                    WHERE co.idComposant2 IN ($urlSegments[1]) AND co.compatibilite = true
+                    GROUP BY c.idComposant
+                        HAVING COUNT(DISTINCT co.idComposant2) = $nmbrComposant;";
+                // Exécuter la requête SQL
+                $result = $conn->query($sql);
+                // Vérifier s'il y a des résultats
+                if ($result->num_rows > 0) {
+                    // Créer un tableau pour stocker les données
+                    $data = array();
+                    // Parcourir les résultats et les stocker dans le tableau
+                    while ($row = $result->fetch_assoc()) {
+                        $data[] = $row;
+                    }
+                    // Convertir les données en format JSON et les retourner
+                    return json_encode($data);
+                } else {
+                    // Aucune donnée trouvée
+                    return "Aucune donnée trouvée";
+                }
             case 'commande':
                 // Récupérer la valeur après "commande/"
                 $qrCodeValue = $urlSegments[1];

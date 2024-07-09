@@ -82,34 +82,52 @@ class App2 extends React.Component {
   handleItemClick = (item) => {
     const { selectedItems } = this.state;
     const index = selectedItems.findIndex((i) => i.idComposant === item.idComposant);
-    
+
     if (index === -1) {
-      // Check if there is already an item of the same type
       const sameTypeIndex = selectedItems.findIndex((i) => i.type === item.type);
       if (sameTypeIndex !== -1) {
-        // Replace the item of the same type
         const updatedItems = [...selectedItems];
         updatedItems[sameTypeIndex] = { ...item, quantity: 1 };
-        this.setState({ selectedItems: updatedItems });
+        this.setState({ selectedItems: updatedItems }, this.fetchCompatibleComponents);
       } else {
-        // Add the new item
         const newItem = { ...item, quantity: 1 };
-        this.setState({ selectedItems: [...selectedItems, newItem] });
+        this.setState({ selectedItems: [...selectedItems, newItem] }, this.fetchCompatibleComponents);
       }
     } else {
       const updatedItems = [...selectedItems];
       updatedItems[index].quantity += 1;
-      this.setState({ selectedItems: updatedItems });
+      this.setState({ selectedItems: updatedItems }, this.fetchCompatibleComponents);
     }
-  
+
     this.toggleModal(null);
+  };
+
+  fetchCompatibleComponents = () => {
+    const { selectedItems } = this.state;
+    const componentIds = selectedItems.map(item => `${item.idComposant}`).join(',');
+    console.log(`${url}/compat/${componentIds}`);
+    axios.get(`${url}/compat/${componentIds}`)
+      .then(response => {
+        const compatibleComponents = response.data;
+        const renamedCategories = this.renameCategories(compatibleComponents);
+        this.setState({ itemsByCategory: renamedCategories });
+      })
+      .catch(error => {
+        console.error('Erreur lors de la récupération des composants compatibles:', error);
+      });
   };
   
 
   handleRemoveItem = (item) => {
     const { selectedItems } = this.state;
     const updatedItems = selectedItems.filter((i) => i.idComposant !== item.idComposant);
-    this.setState({ selectedItems: updatedItems });
+    this.setState({ selectedItems: updatedItems }, () => {
+      if (this.state.selectedItems.length < 1) {
+        this.componentDidMount();
+      }else
+        this.fetchCompatibleComponents();
+      
+    });
   };
 
   calculateTotalPrice = () => {
