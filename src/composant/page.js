@@ -99,13 +99,13 @@ class App2 extends React.Component {
       this.setState({ selectedItems: updatedItems }, this.fetchCompatibleComponents);
     }
 
+    this.handleHoverItem(null)
     this.toggleModal(null);
   };
 
   fetchCompatibleComponents = () => {
     const { selectedItems } = this.state;
     const componentIds = selectedItems.map(item => `${item.idComposant}`).join(',');
-    console.log(`${url}/compat/${componentIds}`);
     axios.get(`${url}/compat/${componentIds}`)
       .then(response => {
         const compatibleComponents = response.data;
@@ -172,7 +172,7 @@ class App2 extends React.Component {
                 </div>
               )}
               <div className="items-list">
-                <span className="close" onClick={() => this.toggleModal(null)}>&times;</span>
+                <span className="close" onClick={() => this.toggleModal(null) && this.handleHoverItem(null)}>&times;</span>
                 {itemsByCategory[currentCategory].map(item => (
                   <div
                     key={item.idComposant}

@@ -10,6 +10,8 @@
 .right-panel {
   width: 30%;
   padding: 20px;
+  background-color: rgb(228, 228, 228);
+  border-radius: 5px;
 }
 
 .item-buttons {
@@ -21,8 +23,8 @@
   width: 100%;
   height: 40px;
   margin-bottom: 10px;
-  background-color: #0079ff; /* Bleu Topachat */
-  color: #ffffff;
+  background-color: #000E3D; /* Bleu Topachat */
+  color: gold;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -94,8 +96,8 @@ li {
 
 
 .img {
-  height: 200px;
-  width: 200px;
+  height: 400px;
+  width: 400px;
 }
 
 .item-description {

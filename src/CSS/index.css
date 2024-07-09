@@ -45,20 +45,9 @@ body {
   font-family: 'Arial', sans-serif;
 }
 
-/* Container styles */
-.App {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 20px;
-}
 
 /* Header styles */
-.Header {
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
-  text-align: center;
-}
+
 
 /* Selector styles (adjust based on your components) */
 .Selector {

@@ -53,7 +53,24 @@ function getDataFromDatabase() {
 
         switch ($action) {
             case 'data':
-                $sql = "SELECT * FROM composant";
+                $sql = "SELECT *
+FROM x.composant
+ORDER BY 
+  CASE 
+    WHEN type = 'CPU' THEN 1
+    WHEN type = 'MOB' THEN 2
+    WHEN type = 'GPU' THEN 3
+    WHEN type = 'COL' THEN 4
+    WHEN type = 'RAM' THEN 5
+    WHEN type = 'SSD' THEN 6
+    WHEN type = 'HDD' THEN 7
+    WHEN type = 'WIF' THEN 8
+    WHEN type = 'CAS' THEN 9
+    WHEN type = 'PSU' THEN 10
+    ELSE 11
+  END,
+  libelle;
+";
                 // Exécuter la requête SQL
                 $result = $conn->query($sql);
                 // Vérifier s'il y a des résultats
@@ -77,7 +94,7 @@ function getDataFromDatabase() {
                 if (checkSqlInjection($urlSegments[1]))
                 return;
                 // Utiliser cette valeur pour la requête SQL
-                $sql = "SELECT * FROM composant WHERE qrCode = '$qrCodeValue'";
+                $sql = "SELECT * FROM x.composant WHERE qrCode = '$qrCodeValue'";
                 // Exécuter la requête SQL
                 $result = $conn->query($sql);
                 // Vérifier s'il y a des résultats
@@ -142,13 +159,30 @@ function getDataFromDatabase() {
                 }
             case 'compat':
                 $ComposantSegments = explode(',', $urlSegments[1]);
+                if (checkSqlInjection($urlSegments[1]))
+                return;
                 $nmbrComposant = count($ComposantSegments);
                 $sql = "SELECT c.* FROM x.composant c
                         JOIN x.proprietes p ON c.idComposant = p.idComposant
                         JOIN x.compatibilites co ON co.idComposant1 = p.idComposant
-                    WHERE co.idComposant2 IN ($urlSegments[1]) AND co.compatibilite = true
-                    GROUP BY c.idComposant
-                        HAVING COUNT(DISTINCT co.idComposant2) = $nmbrComposant;";
+                        WHERE co.idComposant2 IN ($urlSegments[1]) AND co.compatibilite = true
+                        GROUP BY c.idComposant
+                        HAVING COUNT(DISTINCT co.idComposant2) = $nmbrComposant
+                        ORDER BY 
+                        CASE 
+                            WHEN type = 'CPU' THEN 1
+                            WHEN type = 'MOB' THEN 2
+                            WHEN type = 'GPU' THEN 3
+                            WHEN type = 'COL' THEN 4
+                            WHEN type = 'RAM' THEN 5
+                            WHEN type = 'SSD' THEN 6
+                            WHEN type = 'HDD' THEN 7
+                            WHEN type = 'WIF' THEN 8
+                            WHEN type = 'CAS' THEN 9
+                            WHEN type = 'PSU' THEN 10
+                            ELSE 11
+                        END,
+                        libelle;";
                 // Exécuter la requête SQL
                 $result = $conn->query($sql);
                 // Vérifier s'il y a des résultats
