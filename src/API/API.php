@@ -158,9 +158,9 @@ ORDER BY
                     return "Aucune donnée trouvée dans la table stocks";
                 }
             case 'compat':
-                $ComposantSegments = explode(',', $urlSegments[1]);
                 if (checkSqlInjection($urlSegments[1]))
                 return;
+                $ComposantSegments = explode(',', $urlSegments[1]);
                 $nmbrComposant = count($ComposantSegments);
                 $sql = "SELECT c.* FROM x.composant c
                         JOIN x.proprietes p ON c.idComposant = p.idComposant
