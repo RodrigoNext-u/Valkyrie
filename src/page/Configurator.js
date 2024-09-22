@@ -3,15 +3,15 @@ import '../CSS/App2.css';
 import getUrl from '../UrlApi.js';
 import axios from 'axios';
 
-  const debutUrl = getUrl();
-
+const debutUrl = getUrl();
 const url = debutUrl + "/src/API/API.php";
 
 class App2 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedItems: [],
+      selectedItems: [], 
+      selectedItemsByCategory: {}, // Tracks selected item by category
       showModal: false,
       currentCategory: null,
       itemsByCategory: {},
@@ -24,7 +24,6 @@ class App2 extends React.Component {
   componentDidMount() {
     axios.get(url+"/data")
       .then(response => {
-        //console.log('Data from API:', response.data);
         const itemsFromAPI = response.data; 
         const renamedCategories = this.renameCategories(itemsFromAPI);
         this.setState({ itemsByCategory: renamedCategories });
@@ -55,7 +54,6 @@ class App2 extends React.Component {
 
   renameCategories = (items) => {
     const renamedCategories = {};
-    //console.log(items);
     items.forEach(item => {
       let category;
       switch (item.type) {
@@ -80,26 +78,37 @@ class App2 extends React.Component {
   };
 
   handleItemClick = (item) => {
-    const { selectedItems } = this.state;
+    const { selectedItems, selectedItemsByCategory } = this.state;
+
     const index = selectedItems.findIndex((i) => i.idComposant === item.idComposant);
+    const category = this.getCategoryFromType(item.type);
 
     if (index === -1) {
       const sameTypeIndex = selectedItems.findIndex((i) => i.type === item.type);
       if (sameTypeIndex !== -1) {
         const updatedItems = [...selectedItems];
         updatedItems[sameTypeIndex] = { ...item, quantity: 1 };
-        this.setState({ selectedItems: updatedItems }, this.fetchCompatibleComponents);
+        this.setState({ 
+          selectedItems: updatedItems,
+          selectedItemsByCategory: { ...selectedItemsByCategory, [category]: item }, // Update selected item by category
+        }, this.fetchCompatibleComponents);
       } else {
         const newItem = { ...item, quantity: 1 };
-        this.setState({ selectedItems: [...selectedItems, newItem] }, this.fetchCompatibleComponents);
+        this.setState({ 
+          selectedItems: [...selectedItems, newItem],
+          selectedItemsByCategory: { ...selectedItemsByCategory, [category]: item }, // Update selected item by category
+        }, this.fetchCompatibleComponents);
       }
     } else {
       const updatedItems = [...selectedItems];
       updatedItems[index].quantity += 1;
-      this.setState({ selectedItems: updatedItems }, this.fetchCompatibleComponents);
+      this.setState({ 
+        selectedItems: updatedItems,
+        selectedItemsByCategory: { ...selectedItemsByCategory, [category]: item }, // Update selected item by category
+      }, this.fetchCompatibleComponents);
     }
 
-    this.handleHoverItem(null)
+    this.handleHoverItem(null);
     this.toggleModal(null);
   };
 
@@ -116,17 +125,21 @@ class App2 extends React.Component {
         console.error('Erreur lors de la récupération des composants compatibles:', error);
       });
   };
-  
 
   handleRemoveItem = (item) => {
-    const { selectedItems } = this.state;
+    const { selectedItems, selectedItemsByCategory } = this.state;
     const updatedItems = selectedItems.filter((i) => i.idComposant !== item.idComposant);
-    this.setState({ selectedItems: updatedItems }, () => {
+    const category = this.getCategoryFromType(item.type);
+
+    this.setState({ 
+      selectedItems: updatedItems,
+      selectedItemsByCategory: { ...selectedItemsByCategory, [category]: null }, // Clear selected item for category
+    }, () => {
       if (this.state.selectedItems.length < 1) {
         this.componentDidMount();
-      }else
+      } else {
         this.fetchCompatibleComponents();
-      
+      }
     });
   };
 
@@ -146,8 +159,24 @@ class App2 extends React.Component {
     this.setState({ currentHoveredItem: item });
   };
 
+  getCategoryFromType = (type) => {
+    switch (type) {
+      case 'CPU': return 'Le Processeur';
+      case 'GPU': return 'La carte graphique';
+      case 'MOB': return 'La Carte mère';
+      case 'RAM': return 'La RAM';
+      case 'SSD': return 'Le SSD';
+      case 'HDD': return 'Le Disque dur';
+      case 'COL': return 'Watercooling / Ventirad';
+      case 'WIF': return 'Carte Wifi';
+      case 'CAS': return 'Le boîtier';
+      case 'PSU': return 'L\'alimentation';
+      default: return 'Autres';
+    }
+  };
+
   render() {
-    const { itemsByCategory, currentCategory, currentHoveredItem, compatibilityMessage } = this.state;
+    const { itemsByCategory, currentCategory, currentHoveredItem, selectedItemsByCategory, compatibilityMessage } = this.state;
 
     return (
       <div className="container">
@@ -156,7 +185,9 @@ class App2 extends React.Component {
           <div className="item-buttons">
             {Object.keys(itemsByCategory).map((category, index) => (
               <button key={index} className="category-button" onClick={() => this.toggleModal(category)}>
-                {category}
+                {selectedItemsByCategory[category] ? (
+                  <img className="selected-item-image" src={`${debutUrl}/src/ImageComposant/${selectedItemsByCategory[category].type}/${selectedItemsByCategory[category].qrCode}.jpg`} alt={selectedItemsByCategory[category].libelle} />
+                ) : category}
               </button>
             ))}
           </div>

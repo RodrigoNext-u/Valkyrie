@@ -3,12 +3,15 @@
 }
 
 .left-panel {
-  width: 70%;
+  width: 40%;
+  margin: 20px auto 0px 45px;
   padding: 20px;
+  background-color: #007bff;
 }
 
 .right-panel {
-  width: 30%;
+  width: 20%;
+  margin: 20px 45px 0px auto;
   padding: 20px;
   background-color: rgb(228, 228, 228);
   border-radius: 5px;
@@ -20,10 +23,10 @@
 }
 
 .category-button {
-  width: 100%;
+  width: 75%;
   height: 40px;
   margin-bottom: 10px;
-  background-color: #000E3D; /* Bleu Topachat */
+  background-color: #000E3D;
   color: gold;
   border: none;
   border-radius: 5px;
@@ -32,7 +35,7 @@
 }
 
 .category-button:hover {
-  background-color: #0056b3; /* Bleu foncé Topachat */
+  background-color: #0056b3;
 }
 
 .modal {
@@ -67,7 +70,7 @@
 }
 
 .items-list {
-  display: flex;
+  display: block;
   flex-wrap: wrap;
   right : 50%;
   width: 55%;
@@ -76,7 +79,7 @@
 .item {
   width: 50%;
   padding: 10px;
-  height: 80px;
+  height: 10%;
   box-sizing: border-box;
   cursor: pointer;
 }
@@ -96,20 +99,20 @@ li {
 
 
 .img {
-  height: 400px;
-  width: 400px;
+  height: 500px;
+  width: 500px;
 }
 
 .item-description {
-  flex: 1; /* Occupe tout l'espace disponible */
-  padding-right: 10px; /* Ajoute un peu d'espace à droite */
-  border-right: 1px solid #ddd; /* Ajoute une bordure à droite */
+  flex: 1;
+  padding-right: 10px;
+  border-right: 1px solid #ddd;
   width: 35%;
 }
 
 .items {
-  flex: 1; /* Occupe tout l'espace disponible */
-  padding-left: 10px; /* Ajoute un peu d'espace à gauche */
+  flex: 1;
+  padding-left: 10px;
 }
 
 
@@ -139,4 +142,72 @@ li {
 
 .item-details button:hover {
   background-color: #0056b3;
+}
+
+.SignInButton {
+  --primary-color: #645bff;
+  --secondary-color: #fff;
+  --hover-color: #111;
+  --arrow-width: 10px;
+  --arrow-stroke: 2px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 20px;
+  color: var(--secondary-color);
+  padding: 1em 1.8em;
+  background: var(--primary-color);
+  display: flex;
+  transition: 0.2s background;
+  align-items: center;
+  gap: 0.6em;
+  font-weight: bold;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.SignInButton .arrow-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.SignInButton .arrow {
+  margin-top: 1px;
+  width: var(--arrow-width);
+  background: var(--primary-color);
+  height: var(--arrow-stroke);
+  position: relative;
+  transition: 0.2s;
+}
+
+.SignInButton .arrow::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  border: solid var(--secondary-color);
+  border-width: 0 var(--arrow-stroke) var(--arrow-stroke) 0;
+  display: inline-block;
+  top: -3px;
+  right: 3px;
+  transition: 0.2s;
+  padding: 3px;
+  transform: rotate(-45deg);
+}
+
+.SignInButton:hover {
+  background-color: var(--hover-color);
+}
+
+.SignInButton:hover .arrow {
+  background: var(--secondary-color);
+}
+
+.SignInButton:hover .arrow:before {
+  right: 0;
+}
+
+.selected-item-image {
+  height: 50px;
+  width: 50px;
 }
