@@ -1,5 +1,5 @@
 const url = () => {
-    return "http://192.168.1.38/Valkyrie";
+    return `${process.env.DB_HOST}:${process.env.DB_PORT}/Valkyrie`;
   };
   
   export default url;
