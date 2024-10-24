@@ -1,5 +1,5 @@
 const url = () => {
-    return "http://192.168.1.92/Valkyrie";
+    return "http://192.168.1.38/Valkyrie";
   };
   
   export default url;

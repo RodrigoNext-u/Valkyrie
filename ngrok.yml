@@ -1,0 +1,9 @@
+version: 2
+authtoken: 2nsIdIJuPRx0CoFJqLuEf6Tynwb_4w3KxBWPtofv3N2UWnmCx
+tunnels:
+  first:
+    proto: http
+    addr: https://localhost:3001
+  second:
+    proto: http
+    addr: https://localhost:80
