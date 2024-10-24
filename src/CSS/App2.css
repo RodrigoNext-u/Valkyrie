@@ -10,8 +10,8 @@
 }
 
 .right-panel {
-  width: 20%;
-  margin: 20px 45px 0px auto;
+  width: 25%;
+  margin: 20px 45px 0px 0px;
   padding: 20px;
   background-color: rgb(228, 228, 228);
   border-radius: 5px;
@@ -23,19 +23,26 @@
 }
 
 .category-button {
-  width: 75%;
-  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
   margin-bottom: 10px;
+  min-width: 200px; /* Minimum size for responsive behavior */
+  min-height: 80px; /* Minimum height */
+  width: 100%; /* Full width responsive to parent container */
+  height: auto; /* Adjust height automatically */
   background-color: #000E3D;
   color: gold;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
 }
 
 .category-button:hover {
   background-color: #0056b3;
+  transform: scale(1.05);
 }
 
 .modal {
@@ -122,6 +129,8 @@ li {
 
 .item-details {
   padding: 20px;
+  margin: 0xp;
+  font-size: 14px;
 }
 
 .item-details h3 {
@@ -208,6 +217,32 @@ li {
 }
 
 .selected-item-image {
-  height: 50px;
-  width: 50px;
+  max-height: 50px; /* Ensure the image scales properly */
+  max-width: 50px; /* Control the width of the image */
+  object-fit: contain; /* Keeps the aspect ratio intact */
+}
+
+.button-content-horizontal {
+  display: flex;
+  align-items: center; /* Align image and text vertically in the center */
+  justify-content: space-between; /* Distribute space between image and text */
+  gap: 10px; /* Optional: space between image and text */
+  width: 100%; /* Ensure the content uses the full width of the button */
+  height: 100%; /* Adjusts to the button height */
+  padding: 10px; /* Adjust for inner spacing */
+}
+
+/* Style for the remove (cross) button */
+.remove-button {
+  background-color: transparent;
+  color: #FFD700; /* Same yellow as Valkyrie */
+  border: none;
+  font-size: 24px; /* Adjust size for good visibility */
+  cursor: pointer;
+  transition: color 0.2s ease;
+  margin-left: 10px;
+}
+
+.remove-button:hover {
+  color: red; /* Optionally change color on hover */
 }

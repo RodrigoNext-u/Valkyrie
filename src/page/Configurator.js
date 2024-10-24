@@ -181,29 +181,47 @@ class App2 extends React.Component {
     return (
       <div className="container">
         <div className="left-panel">
-          <h2>Choisissez vos éléments :</h2>
-          <div className="item-buttons">
+          <div className="categories-grid">
             {Object.keys(itemsByCategory).map((category, index) => (
               <button key={index} className="category-button" onClick={() => this.toggleModal(category)}>
-                {selectedItemsByCategory[category] ? (
-                  <img className="selected-item-image" src={`${debutUrl}/src/ImageComposant/${selectedItemsByCategory[category].type}/${selectedItemsByCategory[category].qrCode}.jpg`} alt={selectedItemsByCategory[category].libelle} />
-                ) : category}
-              </button>
+              {selectedItemsByCategory[category] ? (
+                <div className="button-content-horizontal">
+                  <img 
+                    className="selected-item-image" 
+                    src={`${debutUrl}/src/ImageComposant/${selectedItemsByCategory[category].type}/${selectedItemsByCategory[category].qrCode}.jpg`} 
+                    alt={selectedItemsByCategory[category].libelle} 
+                  />
+                  <p>{selectedItemsByCategory[category].libelle}</p>
+                  <p>{selectedItemsByCategory[category].prix} €</p>
+                  {/* New cross button to remove the selected item */}
+                  <button 
+                    className="remove-button" 
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent opening the modal
+                      this.handleRemoveItem(selectedItemsByCategory[category]);
+                    }}
+                  >
+                    &times;
+                  </button>
+                </div>
+              ) : category}
+            </button>
             ))}
           </div>
         </div>
+
+        {/* Modal to display item list */}
         {this.state.showModal && (
           <div className="modal">
-            <div className="modal-content" ref={this.modalRef} >
+            <div className="modal-content" ref={this.modalRef}>
               {currentHoveredItem && (
                 <div className="item-description">
                   <img className="img" src={`${debutUrl}/src/ImageComposant/${currentHoveredItem.type}/${currentHoveredItem.qrCode}.jpg`} alt={currentHoveredItem.libelle} />
                   <p>Description détaillée</p>
-                  <p>A venir ...</p>
                 </div>
               )}
               <div className="items-list">
-                <span className="close" onClick={() => this.toggleModal(null) && this.handleHoverItem(null)}>&times;</span>
+                <span className="close" onClick={() => this.toggleModal(null)}>&times;</span>
                 {itemsByCategory[currentCategory].map(item => (
                   <div
                     key={item.idComposant}
@@ -220,17 +238,19 @@ class App2 extends React.Component {
             </div>
           </div>
         )}
+
+        {/* Selected Items Section */}
         <div className="right-panel">
-          <h2>Éléments sélectionnés :</h2>
+          <h2>Aperçu de la config</h2>
           <ul>
             {this.state.selectedItems.map((item, index) => (
               <li key={index}>
                 {item.libelle} - {item.prix} € x {item.quantity}
-                <button onClick={() => this.handleRemoveItem(item)}>Supprimer</button>
+                <button onClick={() => this.handleRemoveItem(item)}>x</button>
               </li>
             ))}
           </ul>
-          <h3>Total : {this.calculateTotalPrice()} €</h3>
+          <h3>Total: {this.calculateTotalPrice()} €</h3>
           <p>{compatibilityMessage}</p>
         </div>
       </div>
