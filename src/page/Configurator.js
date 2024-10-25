@@ -5,11 +5,11 @@ import axios from 'axios';
 
 const debutUrl = getUrl();
 const url = debutUrl + "/src/API/API.php";
-console.log('lien api', url ='/data');
 
 class App2 extends React.Component {
   constructor(props) {
     super(props);
+    console.error('lien api', url ='/data');
     this.state = {
       selectedItems: [], 
       selectedItemsByCategory: {}, // Tracks selected item by category
