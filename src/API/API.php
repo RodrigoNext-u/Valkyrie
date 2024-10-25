@@ -15,7 +15,6 @@ function connexionBDD() {
     $username = "root";
     $password = "zMfnWHhHtdHRoYZNwurumsKsjbefksvj";
     $dbname = "railway";
-    echo($servername + $username + $password + $dbname);
 
     // Connexion à la base de données MySQL
     $conn = new mysqli($servername, $username, $password, $dbname);
