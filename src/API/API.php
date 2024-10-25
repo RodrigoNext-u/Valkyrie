@@ -1,20 +1,16 @@
 <?php
 header("Access-Control-Allow-Origin: *");
-// use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\Dotenv\Dotenv;
 
-// $dotenv = new Dotenv();
-// $dotenv->load('../../.env');
+$dotenv = new Dotenv();
+$dotenv->load('../../.env');
 
 function connexionBDD() {
-    // Informations de connexion à la base de données
-    // $servername = $_ENV["DB_HOST"];
-    // $username = $_ENV["DB_USERNAME"];
-    // $password = $_ENV["DB_PASSWORD"];
-    // $dbname = $_ENV["DB_DATABASE"];
-    $servername = "mysql.railway.internal";
-    $username = "root";
-    $password = "zMfnWHhHtdHRoYZNwurumsKsjbefksvj";
-    $dbname = "railway";
+    //Informations de connexion à la base de données
+    $servername = $_ENV["DB_HOST"];
+    $username = $_ENV["DB_USERNAME"];
+    $password = $_ENV["DB_PASSWORD"];
+    $dbname = $_ENV["DB_DATABASE"];
 
     // Connexion à la base de données MySQL
     $conn = new mysqli($servername, $username, $password, $dbname);
