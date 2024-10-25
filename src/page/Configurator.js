@@ -52,8 +52,10 @@ class App2 extends React.Component {
     }
   };
 
+  
   renameCategories = (items) => {
     const renamedCategories = {};
+    console.log(items);
     items.forEach(item => {
       let category;
       switch (item.type) {
