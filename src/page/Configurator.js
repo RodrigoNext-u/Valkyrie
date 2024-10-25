@@ -9,7 +9,7 @@ const url = debutUrl + "/src/API/API.php";
 class App2 extends React.Component {
   constructor(props) {
     super(props);
-    console.error('lien api', url ='/data');
+    console.log(url);
     this.state = {
       selectedItems: [], 
       selectedItemsByCategory: {}, // Tracks selected item by category
