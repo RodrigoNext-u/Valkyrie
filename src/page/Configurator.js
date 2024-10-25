@@ -22,6 +22,7 @@ class App2 extends React.Component {
   }
 
   componentDidMount() {
+    console.log('lien api', url ='/data');
     axios.get(url+"/data")
       .then(response => {
         const itemsFromAPI = response.data; 
