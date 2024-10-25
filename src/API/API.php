@@ -11,6 +11,10 @@ function connexionBDD() {
     $username = $_ENV["DB_USERNAME"];
     $password = $_ENV["DB_PASSWORD"];
     $dbname = $_ENV["DB_DATABASE"];
+    echo($servername);
+    echo($username);
+    echo($password);
+    echo($dbname);
 
     // Connexion à la base de données MySQL
     $conn = new mysqli($servername, $username, $password, $dbname);
