@@ -58,7 +58,7 @@ function getDataFromDatabase() {
         switch ($action) {
             case 'data':
                 $sql = "SELECT *
-FROM x.composant
+FROM composant
 ORDER BY 
   CASE 
     WHEN type = 'CPU' THEN 1
@@ -98,7 +98,7 @@ ORDER BY
                 if (checkSqlInjection($urlSegments[1]))
                 return;
                 // Utiliser cette valeur pour la requête SQL
-                $sql = "SELECT * FROM x.composant WHERE qrCode = '$qrCodeValue'";
+                $sql = "SELECT * FROM composant WHERE qrCode = '$qrCodeValue'";
                 // Exécuter la requête SQL
                 $result = $conn->query($sql);
                 // Vérifier s'il y a des résultats
@@ -122,8 +122,8 @@ ORDER BY
                 if (checkSqlInjection($urlSegments[1]))
                 return;
                 // Utiliser cette valeur pour la requête SQL
-                $sql = "SELECT * FROM x.stock stock 
-                    left join x.composant composant on composant.idComposant = stock.idComposant
+                $sql = "SELECT * FROM stock stock 
+                    left join composant composant on composant.idComposant = stock.idComposant
                 WHERE qrCode = '$qrCodeValue'";
                 // Exécuter la requête SQL
                 $result = $conn->query($sql);
@@ -143,8 +143,8 @@ ORDER BY
                 }
             case 'stocks':
                 // Utiliser cette valeur pour la requête SQL
-                $sql = "SELECT type, qrCode, qteReel, qteMin FROM x.stock stock
-                join x.composant composant on composant.idComposant = stock.idComposant";
+                $sql = "SELECT type, qrCode, qteReel, qteMin FROM stock stock
+                join composant composant on composant.idComposant = stock.idComposant";
                 // Exécuter la requête SQL
                 $result = $conn->query($sql);
                 // Vérifier s'il y a des résultats
@@ -166,9 +166,9 @@ ORDER BY
                 return;
                 $ComposantSegments = explode(',', $urlSegments[1]);
                 $nmbrComposant = count($ComposantSegments);
-                $sql = "SELECT c.* FROM x.composant c
-                        JOIN x.proprietes p ON c.idComposant = p.idComposant
-                        JOIN x.compatibilites co ON co.idComposant1 = p.idComposant
+                $sql = "SELECT c.* FROM composant c
+                        JOIN proprietes p ON c.idComposant = p.idComposant
+                        JOIN compatibilites co ON co.idComposant1 = p.idComposant
                         WHERE co.idComposant2 IN ($urlSegments[1]) AND co.compatibilite = true
                         GROUP BY c.idComposant
                         HAVING COUNT(DISTINCT co.idComposant2) = $nmbrComposant
@@ -210,9 +210,9 @@ ORDER BY
                 if (checkSqlInjection($urlSegments[1]))
                 return;
                 // Utiliser cette valeur pour la requête SQL
-                $sql = "SELECT *, services.libelle AS 'libelleService' FROM x.detailscommande dtscmd
-                LEFT join x.services services on services.idServices = dtscmd.idServices
-                LEFT join x.composant composant on composant.idComposant = dtscmd.idComposant
+                $sql = "SELECT *, services.libelle AS 'libelleService' FROM detailscommande dtscmd
+                LEFT join services services on services.idServices = dtscmd.idServices
+                LEFT join composant composant on composant.idComposant = dtscmd.idComposant
                 WHERE dtscmd.idCommande = '$qrCodeValue'";
                 // Exécuter la requête SQL
                 $result = $conn->query($sql);
