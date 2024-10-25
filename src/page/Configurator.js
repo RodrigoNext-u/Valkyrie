@@ -25,6 +25,7 @@ class App2 extends React.Component {
     axios.get(url+"/data")
       .then(response => {
         const itemsFromAPI = response.data; 
+        console.log('Data from api :',response.data);
         const renamedCategories = this.renameCategories(itemsFromAPI);
         this.setState({ itemsByCategory: renamedCategories });
       })
