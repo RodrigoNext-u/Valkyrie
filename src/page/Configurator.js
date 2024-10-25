@@ -5,6 +5,7 @@ import axios from 'axios';
 
 const debutUrl = getUrl();
 const url = debutUrl + "/src/API/API.php";
+console.log('lien api', url ='/data');
 
 class App2 extends React.Component {
   constructor(props) {
@@ -24,8 +25,7 @@ class App2 extends React.Component {
   componentDidMount() {
     axios.get(url+"/data")
       .then(response => {
-        const itemsFromAPI = response.data; 
-        console.log('lien api', url ='/data');
+        const itemsFromAPI = response.data;
         const renamedCategories = this.renameCategories(itemsFromAPI);
         this.setState({ itemsByCategory: renamedCategories });
       })
