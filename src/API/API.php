@@ -1,9 +1,9 @@
 <?php
 header("Access-Control-Allow-Origin: *");
-use Symfony\Component\Dotenv\Dotenv;
+// use Symfony\Component\Dotenv\Dotenv;
 
-$dotenv = new Dotenv();
-$dotenv->load('../../.env');
+// $dotenv = new Dotenv();
+// $dotenv->load('../../.env');
 
 function connexionBDD() {
     // Informations de connexion à la base de données
