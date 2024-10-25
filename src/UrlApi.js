@@ -1,5 +1,5 @@
 const url = () => {
-    return `${process.env.RAILWAY_PUBLIC_DOMAIN}/Valkyrie`;
+    return `https://valkyrie-production.up.railway.app/Valkyrie`;
   };
   
   export default url;
